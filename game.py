@@ -1,7 +1,18 @@
 import sys
 import pygame
-from scripts import load_image, load_images, PhysicsEntity, ImageEditor
-from scripts.titlemap import Tilemap
+from scripts import (
+    load_image,
+    load_images,
+    Animation,
+    PhysicsEntity,
+    Player,
+    Clouds,
+    Tilemap
+
+)
+
+
+BASE_IMG_PATH = "data/images/"
 
 
 class Game:
@@ -16,15 +27,23 @@ class Game:
         self.movement = [False, False]
 
         self.assets = {
-            'decor': load_images('tiles/decor'),
-            'grass': load_images('tiles/grass'),
-            'large_decor': load_images('tiles/large_decor'),
-            'stone': load_images('tiles/stone'),
-            'player': load_image('tiles/1_player.png'),
-            'background': load_image('background_resized.png')
+            'decor': load_images(BASE_IMG_PATH + 'tiles/decor'),
+            'grass': load_images(BASE_IMG_PATH + 'tiles/grass'),
+            'large_decor': load_images(BASE_IMG_PATH + 'tiles/large_decor'),
+            'stone': load_images(BASE_IMG_PATH + 'tiles/stone'),
+            'player': load_image(BASE_IMG_PATH + 'tiles/1_player.png'),
+            'background': load_image(BASE_IMG_PATH + 'background_resized.png'),
+            'clouds': load_images(BASE_IMG_PATH + 'clouds'),
+            'player/idle': Animation(load_images(BASE_IMG_PATH + 'entities/player/idle'), img_dur=6),
+            'player/run': Animation(load_images(BASE_IMG_PATH + 'entities/player/run'), img_dur=4),
+            'player/jump': Animation(load_images(BASE_IMG_PATH + 'entities/player/jump')),
+            'player/slide': Animation(load_images(BASE_IMG_PATH + 'entities/player/slide')),
+            'player/wall_slide': Animation(load_images(BASE_IMG_PATH + 'entities/player/wall_slide')),
         }
 
-        self.player = PhysicsEntity(self, 'player', (50, 50), (8, 15))
+        self.clouds = Clouds(self.assets['clouds'], count=16)
+
+        self.player = Player(self, (50, 50), (8, 15))
 
         self.tilemap = Tilemap(self, tile_size=16)
 
@@ -37,6 +56,9 @@ class Game:
             self.scroll[0] += (self.player.rect().centerx - self.display.get_width() / 2 - self.scroll[0]) / 30
             self.scroll[1] += (self.player.rect().centerx - self.display.get_height() / 2 - self.scroll[1]) / 30
             render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
+
+            self.clouds.update()
+            self.clouds.render(self.display, offset=render_scroll)
 
             self.tilemap.render(self.display, offset=self.scroll)
 
@@ -67,4 +89,4 @@ class Game:
 
 if __name__ == "__main__":
     Game().run()
-    #print(ImageEditor.resize_image("data/images/background.png", new_size=(320, 240), view_image=True))
+    # print(ImageEditor.resize_image("data/images/background.png", new_size=(320, 240), view_image=True))
