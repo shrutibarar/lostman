@@ -1,5 +1,5 @@
 class Particle:
-    def __int__(self, game, p_type, pos, velocity=[0,0], frame=0):
+    def __init__(self, game, p_type, pos, velocity=[0, 0], frame=0):
         self.game = game
         self.type = p_type
         self.pos = list(pos)
@@ -10,7 +10,7 @@ class Particle:
     def update(self):
         kill = False
         if self.animation.done:
-            kill  = True
+            kill = True
 
         self.pos[0] += self.velocity[0]
         self.pos[1] += self.velocity[1]
@@ -20,5 +20,6 @@ class Particle:
         return kill
 
     def render(self, surf, offset=(0, 0)):
-        img = self.animation.img()
-        surf.blit(img, (self.pos[0] - offset[0] - img.get_width() // 2, self.pos[1] - offset[1] - img.get_height() // 2))
+        img = self.animation.img()  # Corrected method name from img() to image()
+        surf.blit(img, (self.pos[0] - offset[0] - img.get_width() // 2, self.pos[1] - offset[1] -
+                        img.get_height() // 2))

@@ -5,3 +5,4 @@ from scripts.entities import Player
 
 from .clouds import Clouds, Cloud
 from .titlemap import Tilemap
+from scripts.particles_module import Particle

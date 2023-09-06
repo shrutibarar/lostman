@@ -14,6 +14,7 @@ class Editor:
         pygame.display.set_caption('editor')
         self.screen = pygame.display.set_mode((640, 480))
         self.display = pygame.Surface((320, 240))
+        self.counter = 0
 
         self.clock = pygame.time.Clock()
 
@@ -22,6 +23,8 @@ class Editor:
             'grass': load_images(BASE_IMG_PATH + 'tiles/grass'),
             'large_decor': load_images(BASE_IMG_PATH + 'tiles/large_decor'),
             'stone': load_images(BASE_IMG_PATH + 'tiles/stone'),
+            'spawners': load_images(BASE_IMG_PATH + 'tiles/spawners')
+
         }
 
         self.movement = [False, False, False, False]  # a, d, w, s
@@ -140,8 +143,9 @@ class Editor:
 
         if self.clicking and self.ongrid:
             tile_loc = str(tile_pos[0]) + ';' + str(tile_pos[1])
-            self.tilemap.tilemap[tile_loc] = {'type': self.tile_list[self.tile_group], "variant": self.tile_variant,
-                                              "pos": tile_pos}
+            location = {'type': self.tile_list[self.tile_group], "variant": self.tile_variant, "pos": tile_pos}
+            self.tilemap.tilemap[tile_loc] = location
+            self.counter += 1
         if self.right_clicking:
             tile_loc = str(tile_pos[0]) + ';' + str(tile_pos[1])
             if tile_loc in self.tilemap.tilemap:
